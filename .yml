@@ -1,0 +1,80 @@
+# Authentication Endpoints
+
+# Register a new user
+POST /auth/register
+Request:
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "password": "password123"
+}
+Response:
+- 200 OK: User registered successfully
+- 400 Bad Request: Invalid request format
+
+# Login
+POST /auth/login
+Request:
+{
+  "email": "john@example.com",
+  "password": "password123"
+}
+Response:
+- 200 OK: User logged in successfully
+- 400 Bad Request: Invalid request format
+
+# Google OAuth2 Authentication
+GET /auth/google
+Response:
+- 302 Found: Redirects to Google OAuth2 login page
+
+# Google OAuth2 Callback
+GET /auth/google/callback
+Response:
+- 302 Found: Redirects to profile page after successful authentication
+
+
+# User Endpoints
+
+# Get Current User's Profile
+GET /user/me
+Authentication: Bearer token required
+Response:
+- 200 OK: Current user's profile retrieved successfully
+- 401 Unauthorized: User is not authenticated
+
+# Update Current User's Profile
+PUT /user/me
+Authentication: Bearer token required
+Request:
+{
+  "name": "John Doe",
+  "bio": "Software Engineer",
+  "phone": "123-456-7890",
+  "email": "john@example.com",
+  "photo": "https://example.com/photo.jpg",
+  "isPublic": true
+}
+Response:
+- 200 OK: Current user's profile updated successfully
+- 401 Unauthorized: User is not authenticated
+- 500 Server Error: Internal server error
+
+# Get List of User Profiles
+GET /user/profiles
+Authentication: Bearer token required
+Response:
+- 200 OK: List of user profiles retrieved successfully
+- 401 Unauthorized: User is not authenticated
+
+# Get User Profile by ID
+GET /user/{id}
+Authentication: Bearer token required
+Path Parameters:
+- id (string): The ID of the user profile to retrieve
+Response:
+- 200 OK: User profile retrieved successfully
+- 401 Unauthorized: User is not authenticated
+- 403 Forbidden: Access denied
+- 404 Not Found: User profile not found
+- 500 Server Error: Internal server error

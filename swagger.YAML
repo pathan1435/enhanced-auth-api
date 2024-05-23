@@ -1,0 +1,156 @@
+openapi: 3.0.0
+info:
+  title: Enhanced Auth API
+  version: 1.0.0
+  description: API for authentication with profile visibility settings
+servers:
+  - url: http://localhost:5000
+paths:
+  /auth/register:
+    post:
+      summary: Register a new user
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: User registered successfully
+        '400':
+          description: Bad request
+  /auth/login:
+    post:
+      summary: Login with existing credentials
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: User logged in successfully
+        '400':
+          description: Bad request
+  /auth/google:
+    get:
+      summary: Initiate Google OAuth2 authentication
+      tags:
+        - Authentication
+      responses:
+        '302':
+          description: Redirect to Google OAuth2 login page
+  /auth/google/callback:
+    get:
+      summary: Callback URL for Google OAuth2 authentication
+      tags:
+        - Authentication
+      responses:
+        '302':
+          description: Redirect to profile page after successful authentication
+  /user/me:
+    get:
+      summary: Get current user's profile
+      tags:
+        - User
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Current user's profile retrieved successfully
+        '401':
+          description: Unauthorized
+    put:
+      summary: Update current user's profile
+      tags:
+        - User
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                bio:
+                  type: string
+                phone:
+                  type: string
+                email:
+                  type: string
+                photo:
+                  type: string
+                isPublic:
+                  type: boolean
+      responses:
+        '200':
+          description: Current user's profile updated successfully
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+  /user/profiles:
+    get:
+      summary: Get list of user profiles
+      tags:
+        - User
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: List of user profiles retrieved successfully
+        '401':
+          description: Unauthorized
+  /user/{id}:
+    get:
+      summary: Get user profile by ID
+      tags:
+        - User
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID of the user profile to retrieve
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User profile retrieved successfully
+        '401':
+          description: Unauthorized
+        '403':
+          description: Access denied
+        '404':
+          description: User not found
+        '500':
+          description: Server error
+security:
+  - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
