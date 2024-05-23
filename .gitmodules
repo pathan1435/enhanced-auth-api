@@ -1,0 +1,3 @@
+[submodule "enhanced-auth-api"]
+	path = enhanced-auth-api
+	url = https://github.com/pathan1435/enhanced-auth-api
